@@ -9,7 +9,8 @@
     "build-dev": "tsc",
     "build-qa": "tsc --outdir ./dist/qa",
     "build-staging": "tsc --outdir ./dist/staging",
-    "build-prod": "tsc --outdir ./dist/prod"
+    "build-prod": "tsc --outdir ./dist/prod",
+    "build-start": "npm run build-dev && npm run start"
   },
   "author": "",
   "license": "ISC",
