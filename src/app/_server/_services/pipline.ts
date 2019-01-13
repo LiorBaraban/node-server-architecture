@@ -9,7 +9,7 @@ export class Pipeline extends EventEmitter{
 
     public static get instance(){
         if (!Pipeline._instance) {
-            console.log("creating pipeline");
+            console.log("creating Pipeline");
             
             Pipeline._instance = new Pipeline();
         }

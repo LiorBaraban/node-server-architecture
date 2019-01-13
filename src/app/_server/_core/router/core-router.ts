@@ -3,8 +3,9 @@ import * as fs from 'fs'
 import { RouterService } from "../../_base/router/router";
 import { SocketIOServer } from '../../_services/socket-io-server';
 import moment = require('moment');
-import { MyLogger } from '../../../infra/logger';
-import { config } from '../../../../config/public/config-public.json'
+import { Logger } from '../../../infra/logger';
+import { config } from '../../../../config/private/config-private.json'
+import { Utils } from '../../_services/utils';
 
 
 export class CoreRouterService extends RouterService {
@@ -53,22 +54,24 @@ export class CoreRouterService extends RouterService {
                 res.status(200).send(`Connection OK.\nUptime is ${uptime} \n${numOfConnections} sockets connected.\nAdditional info info in the Node console.`);
             }
             catch (e) {
-                MyLogger.error("error in router");
+                Logger.error("error in router");
                 res.status(400).send("error");
             }
         });
 
 
         router.get('/getLogFile', (req: express.Request, res: express.Response) => {
-            let logFilePath = config.logPath;
-            let split = logFilePath.split('.');
-            let fileExtension = split[split.length -1];
-            let fileName = split[split.length -2];
+            
+            let logFolderPath = config[Utils.env].logFolderPath;
+            let logFile = config[Utils.env].logFile;
+
+            let logFileFullPath = `${logFolderPath}/${logFile}`
+            
             res.writeHead(200, {
                 "Content-Type": "application/octet-stream",
-                "Content-Disposition": "attachment; filename=" + `${fileName}.${fileExtension}`,
+                "Content-Disposition": "attachment; filename=" + `${logFile}`,
               });
-            fs.createReadStream(logFilePath).pipe(res);
+            fs.createReadStream(logFileFullPath).pipe(res);
         });
 
         router.get('/getUptime', (req: express.Request, res: express.Response)=>{

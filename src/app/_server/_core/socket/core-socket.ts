@@ -2,7 +2,7 @@ import { Pipeline } from "../../_services/pipline";
 import { SocketService } from "../../_base/socket/socket";
 import { Socket } from "socket.io";
 import {socketEvents} from "../../../../config/private/socket-events.json"
-import { MyLogger } from "../../../infra/logger";
+import { Logger } from "../../../infra/logger";
 
 export class CoreSocketService extends SocketService{
 
@@ -19,9 +19,9 @@ export class CoreSocketService extends SocketService{
     }
     
     onClientConnection(socket: Socket){
-        MyLogger.info(`socket ${socket.id} handshake`);
+        Logger.info(`socket ${socket.id} handshake`);
         socket.emit(socketEvents.server.connectionSuccess);
-        MyLogger.info(`emitted connection success`);
+        Logger.info(`emitted connection success`);
     }
 
 }

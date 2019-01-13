@@ -2,10 +2,11 @@ import express from 'express';
 import http from 'http'
 import bodyParser from 'body-parser'
 import { config } from '../../config/private/config-private.json'
-import { MyLogger } from '../infra/logger.js';
+import { Logger } from '../infra/logger.js';
 import { ServerComponent } from './_base/server-component.js';
 import { ServerComponentFactory } from './_services/server-component-factory.js';
 import { SocketIOServer } from './_services/socket-io-server.js';
+import { Utils } from './_services/utils.js';
 
 export class Server {
  
@@ -29,8 +30,8 @@ export class Server {
 
     private getPort() {
         let port: number;
-        if (config.port) {
-            port = config.port;
+        if (config[Utils.env].port) {
+            port = config[Utils.env].port;
         } else {
             port = 3000;
         }
@@ -39,7 +40,7 @@ export class Server {
 
     private listen(): void {
         this.server.listen(this.port, () => {
-            MyLogger.write("info", 'listening on *:' + this.port);
+            Logger.write("info", 'listening on *:' + this.port);
         });
     }
 
@@ -47,7 +48,7 @@ export class Server {
         this.expressApp.use(bodyParser.json());
         this.expressApp.use(bodyParser.urlencoded({ extended: false }));
         this.expressApp.all('/*', function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", config.AllowOrigins.join(',')); // restrict it to the required domain
+            res.header("Access-Control-Allow-Origin", config[Utils.env].AllowOrigins.join(',')); // restrict it to the required domain
             res.header('Access-Control-Allow-Methods', 'GET,POST');
             res.header('Access-Control-Allow-Headers', 'Content-type,Accept,X-Access-Token,X-Key');
             // res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');

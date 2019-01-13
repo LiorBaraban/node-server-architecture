@@ -1,4 +1,4 @@
-import { MyLogger } from "../../../infra/logger";
+import { Logger } from "../../../infra/logger";
 import { socketEvents } from "../../../../config/private/socket-events.json"
 import { Pipeline } from "../../_services/pipline";
 import {Socket} from 'socket.io'
@@ -21,12 +21,12 @@ export abstract class SocketService {
         console.log(`socket ${socket.id} handshake on ${this.socketNamespace.name}`);
         socket.on(socketEvents.client.disconnect, this.onSocketDisconnect.bind(this, socket));
         this.subscribeToSocketEvents(socket);
-        MyLogger.info(socketEvents.server.connectionSuccess);
+        Logger.info(socketEvents.server.connectionSuccess);
         socket.emit(socketEvents.server.connectionSuccess);
     };
 
     onSocketDisconnect(socket:Socket){
-        MyLogger.info(`socket ${socket.id} disconnected from ${this.socketNamespace.name}`);
+        Logger.info(`socket ${socket.id} disconnected from ${this.socketNamespace.name}`);
     }
 
     

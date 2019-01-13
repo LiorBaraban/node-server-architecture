@@ -5,12 +5,17 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./dist/dev/index.js",
+
+    "start-dev": "set NODE_ENV=dev&&node ./dist/dev/index.js",
+    "start-qa": "set NODE_ENV=qa&&node ./dist/qa/index.js",
+    "start-staging": "set NODE_ENV=staging&&node ./dist/staging/index.js",
+    "start-prod": "set NODE_ENV=prod&&node ./dist/prod/index.js",
+
     "build-dev": "tsc",
     "build-qa": "tsc --outdir ./dist/qa",
     "build-staging": "tsc --outdir ./dist/staging",
     "build-prod": "tsc --outdir ./dist/prod",
-    "build-start": "npm run build-dev && npm run start"
+    "build-start": "npm run build-dev && npm run start-dev"
   },
   "author": "",
   "license": "ISC",

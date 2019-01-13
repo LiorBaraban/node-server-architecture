@@ -1,44 +1,64 @@
 
+import fs from 'fs';
 import * as winston from 'winston';
-import { Logger, transports } from 'winston';
 import moment from 'moment';
-import { config } from '../../config/public/config-public.json'
-import { format } from 'util';
+import { config } from '../../config/private/config-private.json'
+import { Utils } from '../_server/_services/utils.js';
 
 
-export class MyLogger {
+export class Logger {
 
-    
-    static logger = winston.createLogger({
-        transports: [
-            new winston.transports.File({
-                filename: config.logPath,
-                handleExceptions: true,
-                format: winston.format.combine(
-                    // winston.format.json(),
-                    winston.format.timestamp({
-                        format: 'YYYY-MM-DD HH:mm:ss'
-                    }),
-                    winston.format.json()
-                )
-            }),
-            new winston.transports.Console({
-                format: winston.format.printf(info => `${moment().format('YYYY-MM-DD HH:mm:ss')}  ${info.message}`)
-            })
-        ]
-    })
+    private static _instance: Logger
 
+    private logger : winston.Logger;
+
+    private constructor() {
+
+        let logFolder = config[Utils.env].logFolderPath;
+        let logFile = config[Utils.env].logFile;
+        let fullLogPath = `${logFolder}/${logFile}`; 
+
+        fs.mkdir(logFolder,(err)=>{/*do nothing - folder already exists*/});
+
+        this.logger =  winston.createLogger({
+            transports: [
+                new winston.transports.File({
+                    filename: `${fullLogPath}_${moment().format('YYYY-MM-DD')}`,
+                    handleExceptions: true,
+                    format: winston.format.combine(
+                        // winston.format.json(),
+                        winston.format.timestamp({
+                            format: 'YYYY-MM-DD HH:mm:ss'
+                        }),
+                        winston.format.json()
+                    )
+                }),
+                new winston.transports.Console({
+                    format: winston.format.printf(info => `${moment().format('YYYY-MM-DD HH:mm:ss')}  ${info.message}`)
+                })
+            ]
+        })
+    }
+
+    private static get instance(){
+        if (!Logger._instance) {
+            console.log("creating Logger");
+            
+            Logger._instance = new Logger();
+        }
+        return Logger._instance;
+    }
 
     static write(type, message) {
-        this.logger.log(type, message);
+        Logger.instance.logger.log(type, message);
     }
 
     static info(message) {
-        this.logger.info(message);
+        Logger.instance.logger.info(message);
     }
 
     static error(message) {
-        this.logger.error(message);
+        Logger.instance.logger.error(message);
     }
 
 }

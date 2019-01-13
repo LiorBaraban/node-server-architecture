@@ -1,8 +1,7 @@
-import { MyLogger } from './src/app/infra/logger'
 import { Server } from './src/app/_server/server';
 
 
-process.on('uncaughtException', function (exception) {
+process.on('uncaughtException', (exception)=>{
     console.log(exception);
 });
 
