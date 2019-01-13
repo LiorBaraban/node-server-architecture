@@ -1,0 +1,5 @@
+{
+    "config": {
+        "logPath": "logs.log"
+    }
+}

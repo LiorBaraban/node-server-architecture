@@ -1,3 +1,10 @@
-import {MyLogger} from './src/app/infra/logger'
+import { MyLogger } from './src/app/infra/logger'
+import { Server } from './src/app/_server/server';
 
-MyLogger.write('info','hello world');
+
+process.on('uncaughtException', function (exception) {
+    console.log(exception);
+});
+
+
+let server: Server = new Server();
