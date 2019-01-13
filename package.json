@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./dist/dev/index.js",
+    "build-dev": "tsc",
+    "build-qa": "tsc --outdir ./dist/qa",
+    "build-staging": "tsc --outdir ./dist/staging",
+    "build-prod": "tsc --outdir ./dist/prod"
   },
   "author": "",
   "license": "ISC",
