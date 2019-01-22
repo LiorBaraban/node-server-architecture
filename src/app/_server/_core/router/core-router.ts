@@ -5,7 +5,7 @@ import { SocketIOServer } from '../../_services/socket-io-server';
 import moment = require('moment');
 import { Logger } from '../../../infra/logger';
 import { config } from '../../../../config/private/config-private.json'
-import { Utils } from '../../_services/utils';
+import { Utils } from '../../../infra/utils';
 
 
 export class CoreRouterService extends RouterService {

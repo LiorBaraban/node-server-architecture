@@ -3,7 +3,7 @@ import fs from 'fs';
 import * as winston from 'winston';
 import moment from 'moment';
 import { config } from '../../config/private/config-private.json'
-import { Utils } from '../_server/_services/utils.js';
+import { Utils } from './utils.js';
 
 
 export class Logger {

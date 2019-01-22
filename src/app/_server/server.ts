@@ -6,7 +6,7 @@ import { Logger } from '../infra/logger.js';
 import { ServerComponent } from './_base/server-component.js';
 import { ServerComponentFactory } from './_services/server-component-factory.js';
 import { SocketIOServer } from './_services/socket-io-server.js';
-import { Utils } from './_services/utils.js';
+import { Utils } from '../infra/utils.js';
 
 export class Server {
  
