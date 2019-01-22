@@ -10,20 +10,22 @@ export class Logger {
 
     private static _instance: Logger
 
-    private logger : winston.Logger;
+    private logger: winston.Logger;
+    private loggerFormattedDate: string;
 
     private constructor() {
+        this.loggerFormattedDate = moment().format('YYYY-MM-DD');
 
         let logFolder = config[Utils.env].logFolderPath;
-        let logFile = config[Utils.env].logFile;
-        let fullLogPath = `${logFolder}/${logFile}`; 
+        let logFileWithExtension = config[Utils.env].logFile;
+        let fullLogPath = `${logFolder}/${logFileWithExtension}`;
 
-        fs.mkdir(logFolder,(err)=>{/*do nothing - folder already exists*/});
+        fs.mkdir(logFolder, (err) => {/*do nothing - folder already exists*/ });
 
-        this.logger =  winston.createLogger({
+        this.logger = winston.createLogger({
             transports: [
                 new winston.transports.File({
-                    filename: `${fullLogPath}_${moment().format('YYYY-MM-DD')}`,
+                    filename: `${logFolder}/${this.loggerFormattedDate}_${logFileWithExtension}`,
                     handleExceptions: true,
                     format: winston.format.combine(
                         // winston.format.json(),
@@ -40,11 +42,16 @@ export class Logger {
         })
     }
 
-    private static get instance(){
+    private static get instance() {
+        // check if instance exists
         if (!Logger._instance) {
-            console.log("creating Logger");
-            
             Logger._instance = new Logger();
+        } else {
+            // check for date rotation
+            let currentFormattedDate = moment().format('YYYY-MM-DD');
+            if (!moment(this._instance.loggerFormattedDate).isSame(currentFormattedDate)) {
+                Logger._instance = new Logger();
+            }
         }
         return Logger._instance;
     }
